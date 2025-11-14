@@ -21,7 +21,7 @@ Usage:
   event_mgr.clear()
     Clear all callbacks. Useful for hot-reloading
     Example reload:
-    event_mgr.subscribe("key_shift:down+key_r", function()
+    event_mgr.subscribe("key_r down=key_shift", function()
       event_mgr.clear()
       print("Reloading")
       dofile("main.lua")
