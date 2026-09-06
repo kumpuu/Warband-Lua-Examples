@@ -325,12 +325,14 @@ function count_pattern_occurences(str, pattern)
     return count
 end
 
+--these should be good for native, if you have another module you have to find a new start
 local scene_prop_slot_in_use = 21
 local scene_prop_was_spawned = 22
 
 function find_or_create_scene_prop(kind, pos, scale)
     local prop
 
+    --search free prop first
     for inst in game.propInstIt(kind, game.const.somt_temporary_object) do
         if game.scene_prop_slot_eq(inst, scene_prop_slot_in_use, 0) and
             game.scene_prop_slot_eq(inst, scene_prop_was_spawned, 1)
@@ -341,6 +343,7 @@ function find_or_create_scene_prop(kind, pos, scale)
         end
     end
 
+    --spawn new if we have to
     if not prop then
         game.spawn_scene_prop(kind)
         prop = game.reg0

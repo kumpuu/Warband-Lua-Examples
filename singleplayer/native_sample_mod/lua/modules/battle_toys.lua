@@ -7,6 +7,7 @@ local gravity				= -9.81				--m/s²
 local ball_radius   		= 0.27				--m
 local ball_max_life_time 	= 120				--s
 
+--set default values for our settings
 settings.battle_toys:init({
 	ball_damage_mul = 1,
 	lifesteal = 0,
@@ -76,9 +77,9 @@ local function ball_knockback(ball_pos, speed)
 	end
 end
 
+--Ball shoot trigger
 event_mgr.subscribe("timer_0.1", "net_sp, net_host", function()
 	if not game.key_is_down(game.const.key_q) then return end
-	if game.key_is_down(game.const.key_left_control) then return end --ctrl+b is fly mode...
 	if game.is_presentation_active(prsnt_console) then return end
 	if game.edit_mode_window_open() then return end
 
@@ -87,10 +88,9 @@ event_mgr.subscribe("timer_0.1", "net_sp, net_host", function()
 	local ball_pos = game.pos0
 	ball_pos:moveY(2)
 	ball_pos:moveZ(-1)
+
 	local ball = find_or_create_scene_prop(game.const.spr_stone_ball, ball_pos)
-	-- local ball = find_or_create_scene_prop(game.const.spr_brewery_big_bucket, ball_pos)
-	-- local ball = find_or_create_scene_prop(game.const.spr_barrier_box, ball_pos, vector3.new({x=3,y=3,z=3}))
-	game.prop_instance_enable_physics(ball, 1)
+	game.prop_instance_enable_physics(ball, 1) --is this needed? idk
 
 	--rot.f is the local y axis (f=forwards) of the position
 	local speed = vector3.new(ball_pos.rot.f * ball_speed)

@@ -2,6 +2,8 @@
 
 menu = {}
 
+
+--these are default values for a menu that get merged with user values
 local menu_data_proto = {
     backgroundMesh = 
     {

@@ -2,12 +2,15 @@
 --  shift+m = Select root
 --  shift+k = Save group
 
+--setting this 1) enables hot reload key (Ctrl+Shift+O)
+--             2) replaces all require with dofile. require is not what we want for a reload
+--Hot reloading is not magic! It might lead to bugs if you don't understand how lua works.
 local dev_mode = true
 
 if dev_mode and not __reload_reg then
     --Register Reload Trigger before anything else
     __reload_reg = true
-    game.op.make_default()
+    game.op.make_default() --see manual
 
     for i = 0, game.getNumTemplates()-1 do
         game.addTrigger(i, 0, 0, 0, function()
@@ -24,7 +27,7 @@ if dev_mode and not __reload_reg then
 
                 if event_mgr then event_mgr.dispatch("before_hot_reload") end
                 --We just dispatched the hot_reload event, it's better to wait a frame so e.g. presentations can close
-                if timeout.add then timeout.add(1, rst) else rst() end
+                if timeout.add then timeout.next_frame(rst) else rst() end
             end
         end)
     end
