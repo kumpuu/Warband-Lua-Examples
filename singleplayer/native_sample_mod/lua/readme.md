@@ -11,16 +11,41 @@ Copy these files into Mount\&Blade Warband\\Modules\\Native\\lua. Make sure you 
 
 
 
-Lua scripts are loosely grouped into "libraries" at the root level and "modules" in the modules folder. The libraries can be utilized by modules, but do nothing on their own.
+Lua scripts are loosely grouped into "libraries" at the root level and "modules" in the modules folder. The libraries can be utilized by modules, but do nothing on their own. Modules add actual gameplay code.
 
 
 
-Some options in the lua menu (press J) get saved to disk automatically, it will generate a .json in the settings folder.
+During Battle, press "J" to open and close the mod menu. Some of its options get saved to disk automatically, it will generate a .json in the settings folder. Check out settings.lua.
 
 
 
-* The easiest to understand modules are center\_dot, clock and battle\_toys lifesteal.
-* The physics code in battle\_toys is interesting but also math heavy.
-* scene\_tools has the fly and fast cam mode, it's the most code but there is nothing crazy complicated.
-* height\_map might be a bit convoluted.
+Code complexity is roughly equal to file size. The physics code in battle\_toys is interesting but also math heavy.
+
+Scene\_tools has the fly and fast cam mode, it's the most code but there is nothing crazy complicated.
+
+height\_map might be a bit convoluted to be fair.
+
+
+
+Hotkeys:
+
+* Ctrl+Shift+O 	Hot Reload
+
+
+
+During Battle
+
+* J			Open/Close Menu (During Battle)
+* Ctrl+B		Fly Mode / Fast Cam Mode during Scene Editing
+* Mousewheel		Faster or Slower during Fly/FastCam
+* E/C			Up or Down during Fly/FastCam
+* Ctrl+N		Teleport to next Spawn Point
+* X			Shoot Stone Ball
+* Page Up/Down		Stone Ball speed
+
+
+
+During World Map
+
+* R			Toggle hourly reminder
 

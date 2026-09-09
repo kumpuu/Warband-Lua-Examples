@@ -400,19 +400,22 @@ root_menu.add_btn("Scene Tools", function()
                         local scene_max = game.pos1
                         local scene_width  = scene_max.o.x - scene_min.o.x
                         local scene_height = scene_max.o.y - scene_min.o.y
-                        local res = val/100
+                        local res = menu_data.items.slider_res.val/100
+                        local img_width = round(scene_width/res)
+                        local img_height = round(scene_height/res)
+                        local estimate = img_width*img_height * 4 * 10^-7
 
                         --caption item gets auto generated
                         self.caption_item.text = string.format("Resolution: %.2fm", res)
                         menu_data.items.imgsize.text = string.format(
-                            "Image Size: %dx%d px", round(scene_width/res), (scene_height/res))
+                            "Image Size: %dx%d px (~%.1f minutes)", img_width, img_height, estimate)
                     end,
                     init_change = true, --this will trigger OnChange once after item loaded to set caption
                 },
                 {
                     id = "imgsize",
                     type = "text",
-                    text = "Warning: setting low resolution (<0.5m) will take very long",
+                    text = "",
                     scale = 0.5,
                     margin_top = -0.005
                 },

@@ -1626,12 +1626,8 @@ lhs_operations = [try_for_range,
                   scene_spawned_item_get_instance,
                   prop_instance_get_variation_id,
                   prop_instance_get_variation_id_2,
-                  prop_instance_get_position,
-                  prop_instance_get_starting_position,
-                  prop_instance_get_scale,
                   prop_instance_get_scene_prop_kind,
                   prop_instance_is_animating,
-                  prop_instance_get_animation_target_position,
                   cast_ray,
                   agent_get_item_cur_ammo,
                   mission_get_time_speed,
@@ -2229,6 +2225,7 @@ str_regex_get_matches                     = 4242 #(str_regex_get_matches, <desti
 str_store_regex_replace                   = 4243 #(str_store_regex_replace, <string_register>, <string_1>, <string_regex>, <string_2>), #Stores <string_1> into <string_register>, replacing occurrences of <string_regex> with <string_2>
 str_decode_url                            = 4244 #(str_decode_url, <string_register>, <string_1>), #Decode url encoded <string_1> and stores it into <string_register>. Note that it doesn't convert +'s to spaces(as per the spec)
 str_store_skill_desc                      = 4245 #(str_store_skill_desc, <string_register>, <skill_no>), #Stores the description of <skill_no> into <string_register>
+str_store_savegame_md5                    = 4246 #(str_store_savegame_md5, <string_register>, <save_slot_no>), #MD5 hashes the .sav file for <save_slot_no> and stores it into <string_register>
 
 options_get_verbose_casualties  = 4300 #(options_get_verbose_casualties, <destination>), #Stores verbose casualties enabled/disabled into <destination>
 options_set_verbose_casualties  = 4301 #(options_set_verbose_casualties, <value>), #Enables or disables verbose casualties

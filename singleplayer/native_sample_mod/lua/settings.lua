@@ -47,7 +47,7 @@ section.prototype = {
 section.mt = {
 	--read
 	__index = function(self, k)
-		return section.prototype[k] or self.__data[k]
+		return section.prototype[k] or (section.prototype[k]==nil and self.__data[k])
 	end,
 
 	--write

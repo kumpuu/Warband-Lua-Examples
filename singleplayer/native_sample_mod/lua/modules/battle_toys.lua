@@ -1,5 +1,3 @@
-require "event_mgr"
-	
 local physics_fps 			= 30
 local dt          			= 1/physics_fps 	--s
 local ball_speed  			= 50 				--m/s
@@ -79,7 +77,7 @@ end
 
 --Ball shoot trigger
 event_mgr.subscribe("timer_0.1", "net_sp, net_host", function()
-	if not game.key_is_down(game.const.key_q) then return end
+	if not game.key_is_down(game.const.key_x) then return end
 	if game.is_presentation_active(prsnt_console) then return end
 	if game.edit_mode_window_open() then return end
 
@@ -226,7 +224,7 @@ root_menu.add_btn("Battle Toys", function()
             },
                 {
                     type = "text",
-                    text = "Q: Shoot Ball",
+                    text = "X: Shoot Ball",
                     scale = 0.8
                 },
                 {

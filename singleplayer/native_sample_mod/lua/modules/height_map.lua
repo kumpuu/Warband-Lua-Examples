@@ -202,7 +202,7 @@ function draw_height_map(res, _z_water, draw_spawn_points, number_spawn_points, 
         scene_height = scene_max.o.y - scene_min.o.y
 
         img_width = round(scene_width / step)
-        img_height = round(scene_width / step)
+        img_height = round(scene_height / step)
 
         --Now lets do actual drawing
         local canvas_object = canvas.new(img_width, img_height)
