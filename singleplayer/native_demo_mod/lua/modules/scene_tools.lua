@@ -378,7 +378,6 @@ root_menu.add_btn("Scene Tools", function()
                 type = "text",
                 text = "Props: " .. propNum
             },
-            },
             {
                 type = "text",
                 text = "Total Spawn Points " .. spawnPoints

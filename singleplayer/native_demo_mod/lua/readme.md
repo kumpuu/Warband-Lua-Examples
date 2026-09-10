@@ -36,7 +36,7 @@ Hotkeys:
 During Battle
 
 * J			Open/Close Menu (During Battle)
-* Ctrl+B		Fly Mode / Fast Cam Mode during Scene Editing
+* Ctrl+B		Fly Mode / Fast Cam Mode during Scene Editing (Note: Scene Editing does not work in WSE2. Use WSE1)
 * Mousewheel		Faster or Slower during Fly/FastCam
 * E/C			Up or Down during Fly/FastCam
 * V			Teleport
