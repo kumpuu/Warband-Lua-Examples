@@ -1,4 +1,6 @@
 # Warband-Lua-Examples
-Some Lua Code developed for a Mount&amp;Blade: Warband Dedicated Server
 
-This serves as a reference, it is not standalone. Developed for the Napoleonic Wars module.
+Some Lua Code developed for a Mount\&Blade: Warband
+
+This contains reference code for Singleplayer and Napoleonic Wars Multiplayer.
+
