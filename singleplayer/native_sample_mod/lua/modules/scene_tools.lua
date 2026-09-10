@@ -378,6 +378,7 @@ root_menu.add_btn("Scene Tools", function()
                 type = "text",
                 text = "Props: " .. propNum
             },
+            },
             {
                 type = "text",
                 text = "Total Spawn Points " .. spawnPoints
@@ -496,12 +497,17 @@ root_menu.add_btn("Scene Tools", function()
                 },
                 {
                     type = "text",
+                    text = "E / C: Up/Down (Fly Mode)",
+                    scale = 0.8
+                },
+                {
+                    type = "text",
                     text = "Ctrl + N: Teleport to next Entry Point",
                     scale = 0.8
                 },
                 {
                     type = "text",
-                    text = "E / C: Up/Down (Fly Mode)",
+                    text = "V: Teleport",
                     scale = 0.8
                 },
             {

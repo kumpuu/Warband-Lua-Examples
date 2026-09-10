@@ -1,17 +1,14 @@
-
-event_mgr.world_timer("once", "welcome_timer", function(date)
+event_mgr.world_timer("once", "world_map_welcome", function(date)
 	print("Welcome to the native lua sample mod. The current date is: " .. date)
 end)
-
 
 
 --this runs every hour while on the world map
 --We are not guaranteed however that it will be the very start of the hour,
 --So our servant might remind us a bit late.
 local first = true
-event_mgr.world_timer(1, "test_id", function(date)
-	--this might return nil, false, true. Only true will pass
-	if not savegame_mgr.get("world_map_tell_hour", true) then return end
+event_mgr.world_timer(1, "world_map_servant", function(date, storage)
+	if storage.silent then return end
 
 	local hour = math.floor(date % 24)
 	--date is in hours since game start
@@ -25,6 +22,7 @@ event_mgr.world_timer(1, "test_id", function(date)
 		am = "am"
 	end
 
+	--Can't use print here since it does not convert the {  } bit
 	game.display_message("{Sir/Madame}, it is now " .. hour .. " o'clock " .. am .. ".")
 	if first then
 		first = false
@@ -33,14 +31,17 @@ event_mgr.world_timer(1, "test_id", function(date)
 end)
 
 event_mgr.subscribe("world_key_r", function()
-	local tell = not savegame_mgr.get("world_map_tell_hour", true)
+	local silent = not event_mgr.world_timers.world_map_servant.storage.silent
 
-	if tell then
-		print("Your servant will remind you of the hour.")
-	else
+	if silent then
 		print("Your servant will be silent.")
+	else
+		print("Your servant will remind you of the hour.")
 	end
-	savegame_mgr.set("world_map_tell_hour", tell)
+
+	event_mgr.world_timers.world_map_servant.storage.silent = silent
+	--this could have also been achieved directly with savegame_mgr,
+	--but this way is cleaner.
 end)
 
 event_mgr.subscribe("game_event_party_encounter", function()

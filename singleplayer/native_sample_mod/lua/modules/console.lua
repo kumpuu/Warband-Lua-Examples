@@ -147,7 +147,6 @@ prsnt_console = game.addPrsnt({
 
             load_lines()
 
-            exec = -1
             set_focus = false
             active_line = 1
             last_focused_line = 0
@@ -198,6 +197,7 @@ prsnt_console = game.addPrsnt({
                 if game.key_is_down(game.const.triggers.key_left_shift) or
                    game.key_is_down(game.const.triggers.key_right_shift)
                 then
+                    game.play_sound(game.const.snd_click)
                     quit = true
                     --user might try to start a prsnt...
                     game.hookOperation("start_presentation", nil)

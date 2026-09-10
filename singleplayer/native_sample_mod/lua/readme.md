@@ -1,4 +1,4 @@
-# Native sample mod
+# Native Demo Mod
 
 
 
@@ -39,6 +39,7 @@ During Battle
 * Ctrl+B		Fly Mode / Fast Cam Mode during Scene Editing
 * Mousewheel		Faster or Slower during Fly/FastCam
 * E/C			Up or Down during Fly/FastCam
+* V			Teleport
 * Ctrl+N		Teleport to next Spawn Point
 * X			Shoot Stone Ball
 * Page Up/Down		Stone Ball speed

@@ -21,7 +21,6 @@ function savegame_mgr.get(key, default)
 end
 
 game.OnGameLoad = function()
-	--tbh im not even sure what this event signals
 	log_rgl("Game loaded")
 	event_mgr.dispatch("OnGameLoad", slot, md5)
 end
@@ -64,7 +63,7 @@ function game.OnLoadSave(slot)
 		if data.md5 == md5 then
 			savegame_mgr.data = data.data
 			log_rgl("savegame_mgr: loaded " .. #savegame_mgr.data .. " entries from slot " .. slot)
-			event_mgr.dispatch("savegame_mgr_loaded", slot, md5)
+			event_mgr.dispatch("savegame_mgr_after_load", slot, md5)
 		else
 			log_rgl("savegame_mgr: found .json for slot " .. slot .. ", but md5 mismatch")
 		end

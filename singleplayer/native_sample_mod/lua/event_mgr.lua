@@ -52,8 +52,8 @@ Usage:
 		id:
 			a unqiue string identifier. This is needed to store trigger state to disk.
 
-		callback will receive date.
-		Added timers will save and restore their internal time from disk. Freshly added timers will fire as soon as possible.
+		callback: function(date, storage). storage is a table that can be used to store additional trigger data.
+		Added timers will save and restore their internal time and storage from disk. Freshly added timers will fire as soon as possible.
 
 	event_mgr.remove_world_timer(id)
 		Remove a world timer
@@ -265,6 +265,7 @@ end
 
 function event_mgr.world_timer(interval, id, callback)
 	if interval == "once" then interval = game.const.ti_once end
+	-- print("init timer", id)
 
 	local T = 0 --0 means run immediately
 	if event_mgr.world_timers[id] then
@@ -275,34 +276,47 @@ function event_mgr.world_timer(interval, id, callback)
 		--if you want to fully reset a trigger, call remove_world_timer first
 	end
 
-	event_mgr.world_timers[id] = {interval = interval, trigger_date = T, cb = callback}
+	event_mgr.world_timers[id] = {interval = interval, trigger_date = T, callback = callback, storage = {}}
 end
 
 function event_mgr.remove_world_timer(id)
 	event_mgr.world_timers[id] = nil
 end
 
+event_mgr.subscribe("OnGameLoad", function()
+	--Now this event triggers when we start a new game, or before a save gets loaded
+	--Make sure to wipe trigger_date and storage so that we dont have leftover data from a previous session
+	--If this is a save load, then they will get their correct values in savegame_mgr_after_load
+	-- print("wiping world triggers")
+	for _, v in pairs(event_mgr.world_timers) do
+		v.storage = {}
+		v.trigger_date = 0
+	end
+end)
+
 --save world timer state
 event_mgr.subscribe("savegame_mgr_before_save", function()
-	--we can't json encode functions, so make copy without callback
-	--actually, all we care about is trigger_date
-	local t = {}
+	-- print("save timer state")
+	
+	--really only want to save storage and trigger_date, rest should be reassigned at startup
+	local timers = {}
 	for k, v in pairs(event_mgr.world_timers) do
-		-- print("save world trigger date",k, v.trigger_date)
-		t[k] = v.trigger_date
+		timers[k] = {storage = v.storage, trigger_date = v.trigger_date}
 	end
 
-	savegame_mgr.set("event_mgr_world_timers", t)
+	savegame_mgr.set("event_mgr_world_timers", timers)
 end)
 
 --restore world timer state
-event_mgr.subscribe("savegame_mgr_loaded", function()
+event_mgr.subscribe("savegame_mgr_after_load", function()
+	-- print("restore timer state")
+	
 	local t = savegame_mgr.get("event_mgr_world_timers")
 	if t then
 		for k, v in pairs(t) do
 			if event_mgr.world_timers[k] then
-				-- print("restore world trigger date",k, v)
-				event_mgr.world_timers[k].trigger_date = v
+				event_mgr.world_timers[k].storage = v.storage
+				event_mgr.world_timers[k].trigger_date = v.trigger_date
 			end
 		end
 	end
@@ -318,7 +332,7 @@ game.OnWorldTrigger = function(date)
 	for _, v in pairs(event_mgr.world_timers) do
 		if date >= v.trigger_date then
 			v.trigger_date = date + v.interval
-			v.cb(date)
+			v.callback(date, v.storage)
 		end
 	end
 
