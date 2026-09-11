@@ -1,6 +1,48 @@
 local bit = require("bit")
 local regex = require("regex")
 
+local function _format(v)
+    if type(v) == "string" then return "'" .. v .. "'" else return tostring(v) end
+end
+
+--this function comes with WSE but it's no problem to overwrite it with an extended version
+function table.print(t, prefix, max_depth, _depth, _seen)
+    prefix = prefix or ""
+    _depth = _depth or 1
+    _seen = _seen or {}
+    _seen[t] = true
+
+    for k,v in pairs(t) do
+        if type(v) == "table" then
+            if _seen[v] then
+                print(string.format("%s[%s] %s = %s{", prefix, type(k), _format(k), tostring(v)))
+                print(prefix .. "    #Reference to table#")
+                print(prefix .. "}")   
+            else
+                if #v == 0 then
+                    --dont waste space for empty table
+                    print(string.format("%s[%s] %s = %s{ }", prefix, type(k), _format(k), tostring(v)))
+                else
+                    if (not max_depth) or _depth < max_depth then
+                        print(string.format("%s[%s] %s = %s{", prefix, type(k), _format(k), tostring(v)))
+                        table.print(v, prefix .. "    ", max_depth, _depth+1, _seen)
+                        print(prefix .. "}")   
+                    else
+                        print(string.format("%s[%s] %s = %s{", prefix, type(k), _format(k), tostring(v)))
+                        print(prefix .. "    ...")
+                        print(prefix .. "}")   
+                    end
+                end
+            end
+        else
+            print(string.format("%s[%s] %s = [%s] %s", prefix, type(k), _format(k), type(v), _format(v)))
+        end
+    end
+
+    _seen[t] = nil
+end
+printTable = table.print
+
 function getMissionTime()
     return game.store_mission_timer_a(0)
  end
