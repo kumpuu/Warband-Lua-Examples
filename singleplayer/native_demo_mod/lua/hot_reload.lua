@@ -1,5 +1,5 @@
 --setting this enables the hot reload key (Ctrl+Shift+O)
---Hot reloading is not magic! It might lead to bugs if you don't undedo_actual_reloadand how lua works.
+--Hot reloading is not magic! It might lead to bugs if you don't understand how lua works.
 local dev_mode = true
 
 if dev_mode and not _G.__reload_reg then
