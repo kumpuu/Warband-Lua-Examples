@@ -234,7 +234,7 @@ root_menu.add_btn("Battle Toys", function()
                 },
                 {
                     type = "text",
-                    text = "Page Up: Decrease Ball Velocity",
+                    text = "Page Down: Decrease Ball Velocity",
                     scale = 0.8
                 },
             {
