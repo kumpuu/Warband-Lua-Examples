@@ -27,26 +27,39 @@ height\_map might be a bit convoluted to be fair.
 
 
 
-Hotkeys:
+&#x20;
 
-* Ctrl+Shift+O 	Hot Reload
+&#x09;	
 
-
-
-During Battle
-
-* J			Open/Close Menu (During Battle)
-* Ctrl+B		Fly Mode / Fast Cam Mode during Scene Editing (Note: Scene Editing does not work in WSE2. Use WSE1)
-* Mousewheel		Faster or Slower during Fly/FastCam
-* E/C			Up or Down during Fly/FastCam
-* V			Teleport
-* Ctrl+N		Teleport to next Spawn Point
-* X			Shoot Stone Ball
-* Page Up/Down		Stone Ball speed
+|Hotkeys||
+|-|-|
+|Ctrl+Shift+O |Hot Reload|
 
 
 
-During World Map
+&#x20;
 
-* R			Toggle hourly reminder
+
+
+|During Battle||
+|-|-|
+|J|Open/Close Menu |
+|Ctrl+B|Fly Mode|
+|Ctrl+B|Fast Cam Mode during Scene Editing<br />(Note: Scene Editing does not work in WSE2. Use WSE1)|
+|Mousewheel|Faster or Slower Fly/FastCam|
+|E/C|Up or Down Fly/FastCam|
+|V|Teleport|
+|Ctrl+N|Teleport to next Spawn Point|
+|X|Shoot Stone Ball|
+|Page Up/Down	|Stone Ball speed|
+
+
+
+&#x20;
+
+|During World Map||
+|-|-|
+|R|Toggle hourly reminder|
+
+
 
