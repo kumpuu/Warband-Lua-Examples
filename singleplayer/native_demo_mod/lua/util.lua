@@ -5,7 +5,15 @@ local function _format(v)
     if type(v) == "string" then return "'" .. v .. "'" else return tostring(v) end
 end
 
+--Lua tables are tricky. Internally, they can be like arrays with consecutive indices, or like dicts.
+--Using the # operator only works reliably for tables that are in the array state.
+--So they only reliable way of testing emptieness is next
+function table.empty(t)
+    return next(t) == nil
+end
+
 --this function comes with WSE but it's no problem to overwrite it with an extended version
+--(at the time of this writing, this extended version was not yet in WSE)
 function table.print(t, prefix, max_depth, _depth, _seen)
     prefix = prefix or ""
     _depth = _depth or 1
@@ -19,7 +27,7 @@ function table.print(t, prefix, max_depth, _depth, _seen)
                 print(prefix .. "    #Reference to table#")
                 print(prefix .. "}")   
             else
-                if #v == 0 then
+                if table.empty(v) then
                     --dont waste space for empty table
                     print(string.format("%s[%s] %s = %s{ }", prefix, type(k), _format(k), tostring(v)))
                 else
@@ -400,14 +408,16 @@ function find_or_create_scene_prop(kind, pos, scale)
 
     if scale then
         game.set_fixed_point_multiplier(1000)
-        game.prop_instance_set_scale(prop, scale.x*1000, scale.y*1000, scale.z*1000)
+        game.prop_instance_set_scale(prop, (scale.x or scale[1])*1000, (scale.y or scale[2])*1000, (scale.z or scale[3])*1000)
     end
 
     return prop
 end
 
 function clean_up_scene_prop(inst)
-    game.scene_prop_set_slot(inst, scene_prop_slot_in_use, 0)
-    game.prop_instance_stop_animating(inst)
-    game.prop_instance_set_position(inst, game.pos.new({z=-100}))
+    if inst and game.prop_instance_is_valid(inst) then
+        game.scene_prop_set_slot(inst, scene_prop_slot_in_use, 0)
+        game.prop_instance_stop_animating(inst)
+        game.prop_instance_set_position(inst, game.pos.new({z=-100}))
+    end
 end

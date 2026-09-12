@@ -187,6 +187,121 @@ event_mgr.subscribe("ti_on_agent_hit", "net_sp, net_host", function()
 	game.agent_set_hit_points(my_ag, hp + bonus, 1)
 end)
 
+
+--This spawns a grappling hook for an agent and pulls him to hit target
+--It's old code that uses a lot of pos registers, modsys style
+--pos55 look pos
+--pos56 ray start pos
+--pos57 ray hit pos
+local anim_timeout, tp_timeout
+
+function grappling_hook(agent)
+	game.play_sound_at_position(game.const.snd_throw_stone, 56)
+
+	game.set_fixed_point_multiplier(1000)
+
+	--spawn chain
+	game.copy_position(49, 56)
+	game.position_rotate_x(49, -90)
+	game.position_move_z(49, -500)
+
+	local chain = find_or_create_scene_prop(game.const.spr_chain_10m, game.pos49)
+	local platform = -1
+	local platform_target_pos
+
+	--We will animate to pos57, and if the rotation is different it would turn our chain
+	game.position_copy_rotation(57, 49)
+	local hit_pos = game.preg[57]
+
+	game.position_move_z(57, -500)
+
+	--0-500ms animate the chain
+	game.prop_instance_animate_to_position(chain, 57, 50)
+
+	local look_pos = game.preg[55]
+
+	--after 500ms, move player (movement takes 700ms)
+
+	--Lets put this in a separate timeout, so that if anim_timeout gets canceled the sound will still play
+	timeout.add(500, function() game.play_sound_at_position(game.const.snd_wooden_hit_high_armor_low_damage, hit_pos) end)
+
+	--If we press the hotkey really quickly we can grapple before the previous one is done.
+	--So cancel the previous timeout. It's fine if we give cancel an invalid timeout id, it will simply do nothing.
+	--Could slightly speed up the cancel by setting anim_timeout=nil at the end of the callback but i doubt it matters
+	timeout.cancel(anim_timeout)
+	anim_timeout = timeout.add(500, function()
+		if not game.agent_is_active(agent) then return end
+
+		--Rotate agent look pos so that we can use it to spawn the platform
+		look_pos:rotX(-look_pos:getRot().x -90)
+		game.agent_get_position(49, agent)
+		game.position_copy_rotation(49, look_pos)
+
+		platform = find_or_create_scene_prop(game.const.spr_barrier_2m, game.pos49, {0.4, 0.4, 0.4})
+
+		platform_target_pos = game.pos.new({o = hit_pos.o, rot = game.preg[49].rot})
+
+		--500-1200ms animate platform
+		game.prop_instance_animate_to_position(platform, platform_target_pos, 70)
+
+
+		--Add some teleports for the agent. Normally a moving prop beneath will drag the agent,
+		--But especially when the platform moves downwards he can get lost
+		local steps = 5
+		local cur_step = 1
+		local cur_pos = game.preg[49]
+		local dv = (platform_target_pos.o - cur_pos.o) / steps
+		local dt = 700/steps
+
+		timeout.cancel(tp_timeout)
+		tp_timeout = timeout.add(dt, function(self)
+			if not (game.agent_is_active(agent) and game.agent_is_alive(agent)) then return end
+
+			cur_pos.o = cur_pos.o + dv
+			game.agent_set_position(agent, cur_pos)
+
+			if cur_step < steps then
+				cur_step = cur_step + 1
+				timeout.add(dt, self)
+			end
+		end)
+	end)
+
+	--after 2000ms, cleanup
+	timeout.add(2000, function()
+		clean_up_scene_prop(chain)
+
+		if game.prop_instance_is_valid(platform) then
+			platform_target_pos.o.z = platform_target_pos.o.z - 10
+
+			game.prop_instance_animate_to_position(platform, platform_target_pos, 150)
+			timeout.add(1600, clean_up_scene_prop, platform)
+		end
+	end)	
+end
+
+--Grappling Hook Key
+event_mgr.subscribe("key_g", "net_sp, net_host", function()
+	if game.is_presentation_active(prsnt_console) then return end
+	if game.edit_mode_window_open() then return end
+
+	local agent = getMyAgent()
+	if not agent or not game.agent_is_alive(agent) then return end
+
+	game.set_fixed_point_multiplier(1000)
+
+	--Get look pos and move it to belly area
+	game.agent_get_look_position(55, agent)
+
+	game.copy_position(56, 55)
+	game.position_move_z(56, 100, 1)
+
+	local hit = game.op.cast_ray(57, 56, 10000) --hit_pos, start_pos, ray len
+	if not hit then return end
+
+	grappling_hook(agent)
+end)
+
 root_menu.add_btn("Battle Toys", function()
     menu.show({
         caption = {text = "Battle Toys"},
@@ -221,6 +336,7 @@ root_menu.add_btn("Battle Toys", function()
             {
                 type = "section",
                 text = "Hotkeys",
+                line = true
             },
                 {
                     type = "text",
@@ -235,6 +351,11 @@ root_menu.add_btn("Battle Toys", function()
                 {
                     type = "text",
                     text = "Page Down: Decrease Ball Velocity",
+                    scale = 0.8
+                },
+                {
+                    type = "text",
+                    text = "G: Grappling Hook",
                     scale = 0.8
                 },
             {

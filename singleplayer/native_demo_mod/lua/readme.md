@@ -29,11 +29,11 @@ height\_map might be a bit convoluted to be fair.
 
 &#x20;
 
-&#x09;	
+&#x09;
 
 |Hotkeys||
 |-|-|
-|Ctrl+Shift+O |Hot Reload|
+|Ctrl+Shift+O|Hot Reload|
 
 
 
@@ -43,7 +43,7 @@ height\_map might be a bit convoluted to be fair.
 
 |During Battle||
 |-|-|
-|J|Open/Close Menu |
+|J|Open/Close Menu|
 |Ctrl+B|Fly Mode|
 |Ctrl+B|Fast Cam Mode during Scene Editing<br />(Note: Scene Editing does not work in WSE2. Use WSE1)|
 |Mousewheel|Faster or Slower Fly/FastCam|
@@ -51,7 +51,8 @@ height\_map might be a bit convoluted to be fair.
 |V|Teleport|
 |Ctrl+N|Teleport to next Spawn Point|
 |X|Shoot Stone Ball|
-|Page Up/Down	|Stone Ball speed|
+|Page Up/Down|Stone Ball speed|
+|G|Grappling Hook (10m range)|
 
 
 

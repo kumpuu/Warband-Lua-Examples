@@ -256,7 +256,7 @@ local psys_teleport = game.addPsys({
     rotation_damping = 0
 })
 
---spawn fly prop
+--reset vars
 event_mgr.subscribe("ti_before_mission_start", "net_sp, net_host", function()
     curPoint = 1
     fly_mode_active = false

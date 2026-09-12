@@ -2,6 +2,7 @@ timeout = {}
 local callbacks = {}
 local cur_id = 0
 
+--Internal
 function timeout.tick()
     if #callbacks == 0 then return end
 
@@ -20,6 +21,12 @@ function timeout.tick()
         end
     end
 end
+
+--Add a callback that will execute in <time> ms. Optionally, you can pass additional parameters.
+--Upon execution, callback will receive all the additional parameters and then a reference to itself and the mission time.
+--Example:
+--  timeout.add(1000, function(param1, param2, self, mission_time_ms) ... end, "param 1", "hello")
+--Returns a unique id that can be used with cancel
 
 function timeout.add(time, callback, ...)
     cur_id = cur_id + 1
@@ -44,6 +51,8 @@ function timeout.add_script(time, script_no, ...)
 end
 
 function timeout.cancel(id)
+    if not id then return end
+
     for i, v in ipairs(callbacks) do
         if v.id == id then
             table.remove(callbacks, i)
