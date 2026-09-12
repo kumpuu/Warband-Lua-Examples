@@ -27,6 +27,10 @@ height\_map might be a bit convoluted to be fair.
 
 
 
+If you are making changes: WSE2 may hide script error messages. Set \[General] bSuppressScriptErrors = false   bSuppressWarnings = false   bEditMode = true.
+
+
+
 &#x20;
 
 &#x09;
